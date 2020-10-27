@@ -1,0 +1,5 @@
+*/**/.mod_*.wls
+*.aux
+*.log
+*/**/images/
+
