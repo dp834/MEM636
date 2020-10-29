@@ -1,0 +1,332 @@
+\documentclass{article}
+
+\usepackage[margin=.75in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[shortlabels]{enumitem}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{pgfplots}
+
+\title{Homework 1 \\ MEM 636}
+\author{Athrav Joshi, Damien Prieur, Eamon Fitzgerald, Tuote Huang}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{Problem 1}
+\emph{For each of the scalar systems:}
+\begin{enumerate}[(1)]
+\item $\dot{x} = 2 - 3x +x^2$
+\item $\dot{x} = -40x + 40x^2 + 10x^3$
+\end{enumerate}
+\emph{Determine all of the equilibrium points and evaluate their stability.}
+\begin{enumerate}[(1)]
+\item $\dot{x} = 2 - 3x +x^2$
+$$\dot{x} = (x-2)(x-1) = 0$$
+$$ x_1 = 1 \qquad x_2 = 2$$
+Looking at the plot for $\dot{x}(t)$
+
+\begin{figure}[H]
+\begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.8\linewidth]{{images/plot1_1}.png}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.8\linewidth]{{images/streamplot1_1}.png}
+\end{subfigure}
+\end{figure}
+
+We can see that at $x = 2$ the point is attracting from both the left and the right due to the negative slope.
+Meanwhile we can see that at $x = 3$ the point is repelling due to the positive slope.
+
+\item $\dot{x} = -40x + 40x^2 + 10x^3$
+$$\dot{x} = x(x-2(\sqrt{2}-1))(x+2(\sqrt{2}+1)) = 0$$
+$$ x_1 = 0 \qquad x_2 = -2(\sqrt{2}+1) \qquad x_3 = 2(\sqrt{2} -1)$$
+Looking at the plot for $\dot{x}(t)$
+
+\begin{figure}[H]
+\begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.8\linewidth]{{images/plot1_2}.png}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.8\linewidth]{{images/streamplot1_2}.png}
+\end{subfigure}
+\end{figure}
+
+We can see that at $x = 0$ the point is attracting from both the left and the right due to the negative slope.
+Meanwhile we can see that at $x = -2(\sqrt{2}+1)$ and $x = 2(\sqrt{2} -1) $ the points are repelling due to the positive slope.
+\end{enumerate}
+
+\newpage
+\section*{Problem 2}
+\emph{Consider the system}
+$$\dot{x}_1 = x_2$$
+$$\dot{x}_2 = -x^3_1 - cx_2$$
+\begin{enumerate}[(1)]
+\item
+\emph{Show that the origin is an equilibrium point.}
+\newline
+$$\dot{x}_1 = 0$$
+$$\dot{x}_2 = 0^3 - c0 = 0$$
+Both derivatives are zero at the origin so it's an equilibrium point.
+\item
+\emph{Linearize at the origin and determine if the origin is linearly stable, asymptotically stable.}
+\newline
+We first compute the Jacobian evaluated $\frac{\partial f_i}{\partial x_i}$ at $x=0$.
+Rewriting the system in matrix form
+$$\Delta\dot{x}=Ax$$
+Where matrix 'A' represents the partial derivatives evaluated at the origin $(0,0)$.
+$$\Delta\dot{x}=
+\begin{bmatrix}
+0 & 1\\
+0 & -c
+\end{bmatrix}
+x
+$$
+\begin{figure}[H]
+\begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.8\linewidth]{{images/vectorplot2_2(Pos_c)}.png}
+    \caption{Positive c}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.8\linewidth]{{images/vectorplot2_2(Neg_c)}.png}
+    \caption{Negative c}
+\end{subfigure}
+\newline
+\begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.8\linewidth]{{images/streamplot2_2(Pos_c)}.png}
+    \caption{Positive c}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.8\linewidth]{{images/streamplot2_2(Neg_c)}.png}
+    \caption{Negative c}
+\end{subfigure}
+\end{figure}
+To find if the origin is stable we need to look at the Lyapunov equation $Q^TP+QA=-P$ where $A$ is our matrix from our linear system.
+\newline
+$$
+Q=
+\begin{bmatrix}
+1 & 0 \\
+0 & 1
+\end{bmatrix}
+\implies
+V(x)=
+\begin{bmatrix}
+x_1 & x_2
+\end{bmatrix}
+\begin{bmatrix}
+1 & 0 \\
+0 & 1
+\end{bmatrix}
+\begin{bmatrix}
+x_1 \\
+x_2
+\end{bmatrix}
+=x_1^2 + x_2^2
+$$
+Which is positive definite. Find $P$
+$$
+P=
+-(QA+A^TQ)
+=
+\begin{bmatrix}
+0 & -1  \\
+-1 & 2c \\
+\end{bmatrix}
+$$
+We can see that $|P| = -1$ i.e. $|P|<0$.
+The eigenvalues of $P$ give us
+$$\lambda = c \pm \sqrt{c^2-1}$$
+Which has eigen values on both sides of the plane
+\newpage
+\item
+\emph{Analyze the nonlinear system and determine if the origin is stable, asymptotically stable. If so, estimate the region of attraction.}
+\newline
+Take $$V = \frac{1}{2}x_1^4 + x_2^2$$
+$$\dot{V}
+=
+2x_1^3\dot{x}_1 + 2x_2\dot{x}_2
+=
+2x_1^3x_2 + 2x_2(-x_1^3 - cx_2)
+$$
+$$
+\dot{V}
+=
+2x_1^3x_2 - 2cx_2^2 -2x_2x_1^3
+=
+2x_1^3x_2 - 2x_2x_1^3 - 2cx_2^2
+$$
+$$
+\dot{V} =
+-2cx_2^2
+$$
+Now, $\forall c \geq 0$
+$$\dot{V}(x) \leq 0$$
+Then the origin is globally asymptotically stable (Corollary 2.23).
+\newline
+But, $\forall c < 0$
+$$\dot{V}(x) > 0$$
+Now define a region $D_1 = \{x_1, x_2 | x_1^2 +(x_2-1)^2 \leq 1^2\}$
+$$\dot{V}(1+\sqrt{1 \pm x_2^2}, x_2) = -2cx_2^2 \quad c<0 \implies \dot{V} > 0 $$
+We can see that along the contour we are positive definite.
+And everywhere else in the region $x_2 > 0$ so $\dot{V} > 0$
+\newline
+Then according to Chetaev Instability Theorem (Proposition 2.24) the origin is unstable.
+
+\begin{figure}[H]
+\begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.8\linewidth]{{images/vectorplot2_3(Pos_c)}.png}
+    \caption{Positive c}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.8\linewidth]{{images/vectorplot2_3(Neg_c)}.png}
+    \caption{Negative c}
+\end{subfigure}
+\newline
+\begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.8\linewidth]{{images/streamplot2_3(Pos_c)}.png}
+    \caption{Positive c}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.8\linewidth]{{images/streamplot2_3(Neg_c)}.png}
+    \caption{Negative c}
+\end{subfigure}
+\end{figure}
+\end{enumerate}
+
+\newpage
+\section*{Problem 3}
+\emph{Investigate the stability of the origin, including estimates of the domain of attraction, of the following systems:}
+\begin{enumerate}[(1)]
+\item $\ddot{x} = x - sat(2x-\dot{x})$
+\newline
+Let $x_1 = x$ and $x_2 = \dot{x_1}$. We can rewrite the system as
+$$
+\begin{array}{c}
+x_1 = x \\
+x_2 = \dot{x}_1
+\end{array}
+\implies 
+\begin{array}{c}
+\dot{x}_1 = x_2 \\
+\dot{x}_2 = x_1 - sat(2x_1-x_2)
+\end{array}
+$$
+\begin{figure}[H]
+\begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.6\linewidth]{{images/streamplot3_1_combined}.png}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.6\linewidth]{{images/vectorplot3_1_combined}.png}
+\end{subfigure}
+\end{figure}
+The highlighted region is boundary between the saturation zones, and the horizontal red lines are not actually there since the boundary is linear and continues forever.
+
+If we look near the origin we can remove the saturation term so our region is $-1 \leq 2x-\dot{x} \leq 1 $
+$$
+\begin{array}{c}
+\dot{x}_1 = x_2 \\
+\dot{x}_2 = -x_1 -x_2
+\end{array}
+$$
+This system is at equilibrium when $\dot{x}_1=0$ and $\dot{x}_2=0$.
+We can see that the origin $(0,0)$ satisfies this condition.
+\newline
+Let $V(x_1,x_2) = x_1^2 + x_2^2$. This is positive definite.
+$$ \dot{V} = 2 x_1 x_2 + 2 x_2 (-x_1 -x_2) = 2x_1x_2 - 2x_1x_2 -2x_2^2 $$
+$$ \dot{V} = -2x_2^2 $$
+Which is negative semi-definite therefore it's stable, but not necessarily asymptotically stable.
+Looking at the contour plot of $V$ below we can see that the level surfaces are bounded by concentric circles.
+And since we showed that $\dot{V} \leq 0$.
+All trajectories in the largest set bounded by $ -1 \leq 2x_1 - x_2 \leq 1$ tend to the origin (0,0) so it's Asymptotically stable.
+\newline
+Region of attraction: $ V(x_1,x_2) \leq .45^2$.
+Note this number was not computed accurately, to find the exact value we just need to find the minimum distance between the two region bounding lines.
+\begin{figure}[H]
+\begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.6\linewidth]{{images/ContourPlot3_1}.png}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.6\linewidth]{{images/streamplot3_1_region_of_attraction}.png}
+\end{subfigure}
+\end{figure}
+
+
+\newpage
+\item $\ddot{x} + \dot{x}|\dot{x}| + x - x^3 = 0 \implies \ddot{x} = x^3 - x - \dot{x}|\dot{x}| $
+\newline
+Let $x_1 = x$ and $x_2 = \dot{x_1}$. Due to the $|\dot{x}|$ we need to solve two systems split alot $\dot{x} = 0$  We can rewrite the system as
+$$
+\begin{array}{c}
+x_1 = x \\
+x_2 = \dot{x}_1
+\end{array}
+\implies 
+\begin{array}{cc}
+\dot{x}_1 =& x_2 \\
+\dot{x}_2 =& x_1^3 - x_1 - x_2|x_2|
+\end{array}
+$$
+
+\begin{figure}[H]
+\begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.6\linewidth]{{images/streamplot3_2}.png}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.6\linewidth]{{images/vectorplot3_2}.png}
+\end{subfigure}
+\end{figure}
+
+This system is at equilibrium when $\dot{x}_1=0$ and $\dot{x}_2=0$.
+We can see that the origin $(0,0)$ satisfies this condition.
+\newline
+Let $V(x_1,x_2) = -\frac{1}{2}x_1^4 + x_1^2 + x_2^2  \implies x_2 = \pm \sqrt{\frac{1}{2}x_1^4 - x_1^2}$. 
+\newline
+Define a region $\Omega = \{x_1, x_2 | -\sqrt{\frac{1}{2}x_1^4 - x_1^2} < x_2 < \sqrt{\frac{1}{2}x_1^4 - x_1^2} \}$
+\newline
+The region $\Omega$ is positive definite since the only other zero on the surface is $(0,0)$ and sampling the points between the zeros we find that the points are positive.
+Since the surface is continuous the whole region $\Omega$ is positive definite.
+\newline
+$$ \dot{V} = -2x_1^3x_2 + 2 x_1 x_2 + 2 x_2 (x_1^3 - x_1 - x_2|x_2|) = -x_1^3x_2 + 2x_1x_2 + 2x_1^3x_2 -2x_1x_2 - 2 x_2^2|x_2| $$
+$$ \dot{V} = -2x_2^2|x_2| $$
+Which is negative semi-definite over our region.
+Therefore the origin is stable. We can look at the contour plot of $V$ and see that we have contour $V = .47 | |x_1| < 1$.
+Looking at the contour plot of $V$ below we can see that the level surfaces are bounded by concentric circles.
+And since we showed that $\dot{V} \leq 0$.
+All trajectories in the largest set bounded by $V = .47 | |x_1| < 1$ tend to the origin (0,0) so it's Asymptotically stable for the region.
+\begin{figure}[H]
+\begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.6\linewidth]{{images/contourplot3_2}.png}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=.6\linewidth]{{images/plot3_2}.png}
+\end{subfigure}
+\end{figure}
+
+\end{enumerate}
+
+\end{document}
