@@ -1,0 +1,219 @@
+\documentclass{article}
+
+\usepackage[margin=.75in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[shortlabels]{enumitem}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{pgfplots}
+
+\title{Homework 2 \\ MEM 636}
+\author{Athrav Joshi, Damien Prieur, Eamon Fitzgerald, Tuote Huang}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section*{Problem 1}
+\emph{Compute the Lie brackets for the following pair of vector fields:}
+\begin{enumerate}[(1)]
+\item $v_1 = \begin{bmatrix} x_2 \\ x_1 + x_2 \\ 0 \end{bmatrix}, v_2 = \begin{bmatrix} x_3 \\ x_1 \\ x_1 \end{bmatrix}$
+$$ [v_1,v_2] =
+\begin{bmatrix}
+-x_1 \\
+-x1+x_2-x_3 \\
+x_2
+\end{bmatrix}
+$$
+\item $v_1 = \begin{bmatrix} x_2 \\ x_1 + x_2 \\ 0 \end{bmatrix}, v_2 = \begin{bmatrix} x_1 \\ x_2 \\ x_3 \end{bmatrix}$
+$$ [v_1,v_2] =
+\begin{bmatrix}
+0 \\
+0 \\
+0
+\end{bmatrix}
+$$
+\end{enumerate}
+
+\newpage
+\section*{Problem 2}
+\emph{Consider the nonlinear system:}
+$$
+\begin{cases}
+\dot{x}_1   &= x_1^2x_2 \\
+\dot{x}_2   &= 3x_2 + u
+\end{cases}
+$$
+\begin{enumerate}[(1)]
+\item \emph{Taylor linearize the system at the origin, $u = 0$, $x_1 = 0$, $x_2 = 0$.
+            Is the linearized system controllable?}
+\newline
+\newline
+$$
+A
+=
+\begin{bmatrix}
+\frac{\partial f_1}{\partial x_1} & \frac{\partial f_1}{\partial x_2} \\
+\frac{\partial f_2}{\partial x_1} & \frac{\partial f_2}{\partial x_2}
+\end{bmatrix}
+\qquad
+B
+=
+\begin{bmatrix}
+\frac{\partial f_1}{\partial u} \\
+\frac{\partial f_2}{\partial u}
+\end{bmatrix}
+$$
+$$
+A
+=
+\begin{bmatrix}
+2x_1x_2 & x_1^2\\
+0 & 3
+\end{bmatrix}
+\qquad
+B
+=
+\begin{bmatrix}
+0 \\
+1
+\end{bmatrix}
+$$
+We evaluate this at our equilibrium point, in our case the origin.
+So our matrices become
+$$
+A
+=
+\begin{bmatrix}
+0 & 0 \\
+0 & 3
+\end{bmatrix}
+\qquad
+B
+=
+\begin{bmatrix}
+0 \\
+1
+\end{bmatrix}
+\implies
+\dot{x} = Ax + Bu
+$$
+To test for controllability we can look at the controllability matrix and look at its rank
+$$
+R = \begin{bmatrix} B & AB \end{bmatrix}
+=
+\begin{bmatrix}
+0 & 0 \\
+1 & 3
+\end{bmatrix}
+\qquad
+rank(R) = 1
+$$
+Since the rank is not full the linearized system is not controllable.
+
+\item \emph{Is the nonlinear system exactly feedback linearizable? If so find the normal form and linearizing control.}
+\newline
+\newline
+For the system to be locally controllable we must show $dim \Delta_{C_0}(x_0) = n, \forall x_0 \in R^n $ where
+$$ \Delta_{C_0} =  \langle f,g_1,... ,g_m | span\{g_1, ... ,g_m\}\rangle $$
+$$ f = \begin{bmatrix} x_1^2x_2 \\ 3x_2\end{bmatrix} \qquad g = \begin{bmatrix}0 \\ 1 \end{bmatrix} $$
+$$ [f, g](x) = \begin{bmatrix} -x_1^2 \\ -3 \end{bmatrix} \qquad [f,[f,g]] = \begin{bmatrix} 0 \\ 0 \end{bmatrix}$$
+$$ \Delta_{C_0} = span\{\begin{bmatrix} x_1^2x_2 \\ 3x_2\end{bmatrix}, \begin{bmatrix} -x_1^2 \\ -3 \end{bmatrix} \} $$
+Which has a dimension equal to $n$ so we are locally controllable and therefore exactlyfeedback linearizable.
+Assuming the system is SISO $y = x_1$
+$$z_1 = y = x_1 $$
+$$z_2 = \dot{y} = \dot{x}_1 = \dot{z_1} $$
+$$ \dot{z_2} = 2x_1^3x_2^2 + 3x_1^2x_2 + x_1^2u $$
+$$ \text{Let, } u = \frac{-2x_1^3x_2^2-3x_1^2x_2}{x_2} + \frac{v}{x_2} $$
+$u$ is our linearizing control and our linearized system is
+$$ \dot{z}_1 = z_2 $$
+$$ \dot{z}_2 = v $$
+$$ y =  z_1 $$
+Our system simplifies to
+$$
+\dot{\bar{z}}=
+\begin{bmatrix}
+0 & 1 \\
+0 & 0
+\end{bmatrix}
+\bar{z}
++
+\begin{bmatrix}
+0 \\
+1
+\end{bmatrix}
+v
+$$
+$$ y = \begin{bmatrix} 1 & 0 \end{bmatrix} \hat{z} $$
+
+\item \emph{Consider the output $y = -2x_1-x_2$. Find the input-output linearizing control.
+            Obtain the zero dynamics and examine their stability.
+            Can the system be asymptotically stabilized?}
+\newline
+\newline
+$$ y = -2x_1-x_2$$
+$$ \dot{y} = -2\dot{x}_1 - \dot{x_2} = -2x_1^2x_2 -3x_2 - u $$
+$$ \implies r = 1 \quad \alpha(x) = -2x_1^2x_2-3x_2 \quad \rho(x)= 1 \quad u = -3x_2 - 2x_1^2x_2 - v$$
+$$ z_1 (x) = -2x_1 -x_2 = y $$
+Choose another function to complete the transformation
+$$ \xi_1(x) = x_1 $$
+$$ \implies x_1 = \xi_1 \quad x_2 = -2\xi_1-z_1 $$
+$$ \dot{\xi}_1(x) = x_1^2x_2  = \xi_1^2(-2\xi_1-z_1) = -2\xi_1^3 -z_1\xi_1^2$$
+$$ \dot{z}_1 = v $$
+
+$$
+\begin{bmatrix}
+\dot{z}_1 \\
+\dot{\xi}_1
+\end{bmatrix}
+=
+\begin{bmatrix}
+0 \\
+-2\xi_1^3 - z_1\xi_1^2
+\end{bmatrix}
++
+\begin{bmatrix}
+-1 \\
+0
+\end{bmatrix}
+v
+$$
+Zero Dynamics
+$$ \dot{\xi}_1 = -2\xi_1^3 $$
+Which is stable.
+The system can be asymptotically stabilized since the internal dynamics are asymptotically stable and the output can be stabalized with a linear regulator.
+
+
+\end{enumerate}
+
+\newpage
+\section*{Problem 3}
+\emph{Consider a SISO system}
+$$ \dot{x} = f(x) + g(x)u, \quad y=h(x) $$
+\emph{Assume the system has well-defined relative degree $r$, so that the feedback linearized input-output dynamics are:}
+$$ y^{(r)}=v $$
+\emph{Suppose $y_R(t)$ (continuous derivatives up to $y_R^{(r)}$ will suffice) reference trajectory.
+      Design a tracking controller based on stabilizing the error dynamics.
+      Discuss your analysis.}
+\newline
+\newline
+We aren't really sure how to do this one so here is an attempt.
+\newline
+If $y^{(r)} = v$
+\newline
+$y^{(r)} = L_f^rh(x) + L_gL^{r-1}h(x)u = v$
+\newline
+if $u = \frac{1}{L_gL^{r-1}h(x)}(-L_f^rh(x)+y_R^{(r)} + v)$
+\newline
+$y^{(r)} = y_R^{(r)} + v \therefore y_R^(r)$ must be $0$
+\newline
+$e^{(r)} = y^{(r)}-y_R^{(r)}=v $ and if $y_R^{(r)} = 0, \quad e^{(r)}=y^{(r)}=v$
+\newline
+This implies that the r-th derivative of the reference curve must be zero.
+Any higher order derivatives will be zero and cause the algorithm to fail (in the tracking case).
+
+
+\end{document}
